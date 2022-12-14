@@ -35,78 +35,78 @@
 #include <iostream>
 #include <pcl/search/impl/search.hpp>
 
-//#include <glog/logging.h>
+// #include <glog/logging.h>
 
 using namespace std;
 using namespace gtsam;
 
 using PointT = pcl::PointXYZI;
 
-class DataSaver {
- public:
-  DataSaver();
+class DataSaver
+{
+public:
+    DataSaver();
 
-  ~DataSaver();
+    ~DataSaver();
 
-  DataSaver(string _base_dir, string _sequence_name);
+    DataSaver(string _base_dir, string _sequence_name);
 
-  void setDir(string _base_dir, string _sequence_name);
+    void setDir(string _base_dir, string _sequence_name);
 
-  void setConfigDir(string _configDirectory);
+    void setConfigDir(string _configDirectory);
 
-  void setExtrinc(bool _use_imu, Eigen::Vector3d _t_body_sensor,
-                  Eigen::Quaterniond _q_body_sensor);
+    void setExtrinc(bool _use_imu, Eigen::Vector3d _t_body_sensor,
+                    Eigen::Quaterniond _q_body_sensor);
 
-  void saveOptimizedVerticesKITTI(gtsam::Values _estimates);
+    void saveOptimizedVerticesKITTI(gtsam::Values _estimates);
 
-  void saveOdometryVerticesKITTI(std::string _filename);
+    void saveOdometryVerticesKITTI(std::string _filename);
 
-  void saveOriginGPS(Eigen::Vector3d gps_point);
+    void saveOriginGPS(Eigen::Vector3d gps_point);
 
-  void saveTimes(vector<double> keyframeTimes);
+    void saveTimes(vector<double> keyframeTimes);
 
-  void saveOptimizedVerticesTUM(gtsam::Values _estimates);
+    void saveOptimizedVerticesTUM(gtsam::Values _estimates);
 
-  void saveOdometryVerticesTUM(
-      std::vector<nav_msgs::Odometry> keyframePosesOdom);
+    void saveOdometryVerticesTUM(
+        std::vector<nav_msgs::Odometry> keyframePosesOdom);
 
-  void saveGraphGtsam(gtsam::NonlinearFactorGraph gtSAMgraph,
-                      gtsam::ISAM2 *isam, gtsam::Values isamCurrentEstimate);
+    void saveGraphGtsam(gtsam::NonlinearFactorGraph gtSAMgraph,
+                        gtsam::ISAM2 *isam, gtsam::Values isamCurrentEstimate);
 
-  void saveGraph(std::vector<nav_msgs::Odometry> keyframePosesOdom);
+    void saveGraph(std::vector<nav_msgs::Odometry> keyframePosesOdom);
 
-  void saveResultBag(std::vector<nav_msgs::Odometry> allOdometryVec,
-                     std::vector<sensor_msgs::PointCloud2> allResVec);
+    void saveResultBag(std::vector<nav_msgs::Odometry> allOdometryVec,
+                       std::vector<sensor_msgs::PointCloud2> allResVec);
 
-  void saveResultBag(std::vector<nav_msgs::Odometry> allOdometryVec,
-                     std::vector<sensor_msgs::PointCloud2> allResVec,
-                     std::vector<geometry_msgs::TransformStamped> trans_vec);
+    void saveResultBag(std::vector<nav_msgs::Odometry> allOdometryVec,
+                       std::vector<sensor_msgs::PointCloud2> allResVec,
+                       std::vector<geometry_msgs::TransformStamped> trans_vec);
 
-  void saveLoopandImagePair(
-      std::map<int, int> loopIndexCheckedMap,
-      std::vector<std::vector<int>> all_camera_corre_match_pair);
+    void saveLoopandImagePair(
+        std::map<int, int> loopIndexCheckedMap,
+        std::vector<std::vector<int>> all_camera_corre_match_pair);
 
-  void savePointCloudMap(std::vector<nav_msgs::Odometry> allOdometryVec,
-                         std::vector<pcl::PointCloud<PointT>::Ptr> allResVec);
+    void savePointCloudMap(std::vector<nav_msgs::Odometry> allOdometryVec,
+                           std::vector<pcl::PointCloud<PointT>::Ptr> allResVec);
 
+    void savePointCloudMap(pcl::PointCloud<PointT> allResVec);
 
-  void savePointCloudMap(pcl::PointCloud<PointT> allResVec);
+    int readParameter();
 
-  int readParameter();
+    int saveKMLTrajectory(const std::vector<Eigen::Vector3d> lla_vec);
 
-  int saveKMLTrajectory(const std::vector<Eigen::Vector3d> lla_vec);
+private:
+    string base_dir, sequence_name;
+    string save_directory, config_directory;
 
- private:
-  string base_dir, sequence_name;
-  string save_directory, config_directory;
+    vector<string> configParameter;
 
-  vector<string> configParameter;
+    bool use_imu_frame = false;
+    Eigen::Quaterniond q_body_sensor;
+    Eigen::Vector3d t_body_sensor;
 
-  bool use_imu_frame = false;
-  Eigen::Quaterniond q_body_sensor;
-  Eigen::Vector3d t_body_sensor;
-
-  vector<double> keyframeTimes;
+    vector<double> keyframeTimes;
 };
 
-#endif  // FAST_LIO_SRC_PGO_SRC_DATASAVER_H_
+#endif // FAST_LIO_SRC_PGO_SRC_DATASAVER_H_
